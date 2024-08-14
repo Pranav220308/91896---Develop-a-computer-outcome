@@ -31,7 +31,6 @@ def quit():
     response = messagebox.askyesno("Quit", "Are you sure you want to quit?")
     if response == 1:
         main_window.destroy()
-    #main_window.destroy()
 
 
 #print all customer details
