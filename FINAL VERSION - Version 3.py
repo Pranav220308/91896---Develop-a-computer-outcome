@@ -71,7 +71,7 @@ def check_inputs ():
     #Program checks if name is not blank, if blank then it outputs a error
     print("ck >>" + customer_name.get())
     if len(customer_name.get()) == 0:
-        messagebox.showwarning("Warning","No blank fields!")
+        messagebox.showwarning("Warning","Customer Name field must not be left blank!")
         return 0 # entered details were incorrect.
     elif (customer_name.get().isalpha()) == False:
         messagebox.showerror("Error","No numbers, blank symbols or symbols for name. Alphabet only and no spaces!")
@@ -84,7 +84,7 @@ def check_inputs ():
         messagebox.showwarning("Warning","You must not leave the Amount Hired Field Blank!")
         return 0 # entered details were incorrect.
     elif (entry_amount.get().isdigit()) == False: 
-        messagebox.showerror("Error","No symbols, negative numbers, blank spaces or letters in the amount hired field!")
+        messagebox.showerror("Error","No symbols, negative numbersor letters in the amount hired field!")
         return 0
     elif int(entry_amount.get()) < 1 or  int(entry_amount.get()) > 500:
         messagebox.showerror("Error","You can only have a quanitiy of an item between the range of 1-500!") 
@@ -104,6 +104,7 @@ def append_entry ():
         receipt_num = random.randint(1,10000)
         #append each item to its own area of the list
         customer_details.append([ str(counters['total_entries']) ,receipt_num,customer_name.get(),item.get(),entry_amount.get()])
+        #create a bulleted list for the valid entries messagebox.
         bulleted_list = "\n".join([
         "\u2022 Name is valid",
         "\u2022 Amount is valid",
@@ -114,8 +115,6 @@ def append_entry ():
         #clear the boxes
         customer_name.delete(0,'end')
         item.delete(0,'end')
-        if entry_amount.isdigit() == True:
-            entry_amount.delete(0,'end')
         entry_amount.delete(0,'end')
         counters['total_entries'] += 1        
     else:
