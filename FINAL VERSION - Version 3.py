@@ -114,7 +114,8 @@ def append_entry ():
         #clear the boxes
         customer_name.delete(0,'end')
         item.delete(0,'end')
-        
+        if entry_amount.isdigit() == True:
+            entry_amount.delete(0,'end')
         entry_amount.delete(0,'end')
         counters['total_entries'] += 1        
     else:
