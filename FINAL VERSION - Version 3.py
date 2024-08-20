@@ -77,7 +77,10 @@ def check_inputs ():
         messagebox.showerror("Error","No numbers, blank symbols or symbols for name. Alphabet only and no spaces!")
         return 0 # entered details were incorrect.
     if len(item.get()) == 0:
-        messagebox.showwarning("Warning","You must select an item!") 
+        messagebox.showwarning("Warning","You cannot procced without selecting a item!")
+        return 0
+    elif (item.get().isdigit()) == True:
+        messagebox.showwarning("Error","Not a valid item!")
         return 0
     #Program checks if the item amount is not blank and that the amount enetered is between 1-500 
     if len(entry_amount.get()) == 0:
@@ -97,7 +100,7 @@ def append_entry ():
 
         #create variables for valid entries where a messagebox pops up when submit button is pressed. 
         valid_name = (customer_name.get().isalpha()) == 1
-        valid_item = len(item.get()) == 1
+        valid_item = (item.get()) == 1
         valid_amount = (entry_amount.get().isdigit()) == 1
         valid_entries = [valid_name and valid_item and valid_amount]
         #Create a variable for random receipt number. 
@@ -180,7 +183,6 @@ items = [
     "Serviettes",
 ]
 item = ttk.Combobox(main_window, value=items)
-item.current(0)
 item.bind("<<ComboboxSelected>>", combo)
 item.grid(column=1, row=1)
 entry_amount = Entry(main_window)
