@@ -42,32 +42,33 @@ def quit():
 
 #print all customer details 
 def print_customer_details ():
-    tree = ttk.Treeview(columns=customer_details,show="",style="ttk.style")
+
+    for widget in main_window.grid_slaves():
+        if int(widget.grid_info()["row"]) > 3:
+            widget.grid_forget() 
     if counters['total_entries'] == 0:
         messagebox.showwarning("Error","Enter all fields!")
     else:
         name_count = 0
     #Create column headings
-        Label(main_window, font=("Bahnschrift", 10, "bold"),text="Entry No.").grid(column=0,row=7,pady=25)
-        Label(main_window, font=("Bahnschrift", 10, "bold"),text="Reciept Number").grid(column=1,row=7,pady=25)
-        Label(main_window, font=("Bahnschrift", 10, "bold"),text="Full Name").grid(column=2,row=7)
-        Label(main_window, font=("Bahnschrift", 10, "bold"),text="Item Hired ").grid(column=3,row=7)
-        Label(main_window, font=("Bahnschrift", 10, "bold"),text="Amount Hired").grid(column=3,columnspan=3,padx=20,row=7)
+        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Entry No.",bg='#b4c8e4').grid(column=0,row=7,pady=25)
+        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Reciept Number",bg='#b4c8e4').grid(column=1,row=7,pady=25)
+        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Full Name",bg='#b4c8e4').grid(column=2,row=7)
+        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Item Hired ",bg='#b4c8e4').grid(column=3,row=7)
+        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Amount Hired",bg='#b4c8e4').grid(column=3,columnspan=3,padx=20,row=7)
     #add each item in the list into its own row
     while name_count < counters['total_entries'] :
         Label(main_window, text=name_count).grid(column=0,row=name_count+8) 
-        Label(main_window, text=(customer_details[name_count][0]),font=("Bahnschrift", 10)).grid(column=0,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][1]),font=("Bahnschrift", 10)).grid(column=1,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][2]),font=("Bahnschrift", 10)).grid(column=2,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][3]),font=("Bahnschrift", 10)).grid(column=3,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][4]),font=("Bahnschrift", 10)).grid(column=3,columnspan=3,padx=20,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][0]),font=("Bahnschrift", 11)).grid(column=0,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][1]),font=("Bahnschrift", 11)).grid(column=1,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][2]),font=("Bahnschrift", 11)).grid(column=2,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][3]),font=("Bahnschrift", 11)).grid(column=3,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][4]),font=("Bahnschrift", 11)).grid(column=3,columnspan=3,padx=20,row=name_count+8)
         name_count +=  1
         counters['name_count'] = name_count
-#binding the same message in a message box to two variable.
 #Check the inputs are all valid
 def check_inputs ():
     #Program checks if name is not blank, if blank then it outputs a error
-    print("ck >>" + customer_name.get())
     if len(customer_name.get()) == 0:
         messagebox.showwarning("Warning","Customer Name field must not be left blank!")
         return 0 # entered details were incorrect.
@@ -115,11 +116,11 @@ def append_entry ():
             saving_details(customer_details)        
         #clear the boxes
         customer_name.delete(0,'end')
-        item.delete(0,'end')
+        item.set('')
+        #item.delete(0,'end')
         entry_amount.delete(0,'end')
         counters['total_entries'] += 1        
     else:
-        print("append_entry ()    invalid input!")
         return 0
 
 #Function for deleting a row from the list
@@ -136,9 +137,12 @@ def delete_row():
     name_count = counters['name_count']
     delete_item.delete(0,'end')
     #clear the last item displayed on the GUI
-    for widget in main_window.grid_slaves():
-        if int(widget.grid_info()["row"]) > 7:
-            widget.grid_forget()
+    if len(customer_details) <= 0:
+        for widget in main_window.grid_slaves():
+            if int(widget.grid_info()["row"]) > 3:
+                widget.grid_forget()
+    else:
+        print_customer_details()
             
         
 
@@ -165,9 +169,9 @@ def button_setup():
 
     Label(main_window,text="Amount Hired",font=("Bahnschrift", 12, "bold"),bg='#b4c8e4').grid(column=0, row=2, padx=5, pady=10, sticky=E)
 
-    Button(main_window,text="Quit",font=("Bahnschrift", 12, "bold"), command=quit, bg="#ba2106", fg="#FFFFFF",width=12).grid(column=2,row=0,pady=10,sticky=E)
+    Button(main_window,text="Print",font=("Bahnschrift", 12, "bold"),command=print_customer_details,width=12).grid(column=2,row=0, pady=10,sticky=E)
     Button(main_window,text="Submit",font=("Bahnschrift", 12, "bold"),command=append_entry,width=12).grid(column=2,row=1,pady=10,sticky=E)
-    Button(main_window,text="Print",font=("Bahnschrift", 12, "bold"),command=print_customer_details,width=12).grid(column=3,row=0, pady=10,sticky=E)
+    Button(main_window,text="Quit",font=("Bahnschrift", 12, "bold"), command=quit, bg="#ba2106", fg="#FFFFFF",width=12).grid(column=3,row=0,pady=10,sticky=E)
     Button(main_window,text="Delete Receipt",font=("Bahnschrift", 12, "bold"),command=delete_row,width=12).grid(column=3, row=1,pady=10,sticky=E)
     #create all the empty and default labels, buttons and entry boxes. Put them in the correct grid location
 
@@ -184,13 +188,10 @@ def combo(event):
     myLabel = Label(main_window, text="")
 
 
-items = [
-    "Spoon",
-    "Forks",
-    "Party Plates",
-    "Serviettes",
-]
-item = ttk.Combobox(main_window, value=items)
+items = ["Spoon","Forks","Party Plates","Serviettes","Drinking Cups","Paper Bowls","Candles"]
+var= StringVar() 
+item = ttk.Combobox(main_window, textvariable= var, value=items)
+item['state'] = 'readonly'
 item.bind("<<ComboboxSelected>>", combo)
 item.grid(column=1, row=1)
 entry_amount = Entry(main_window)
