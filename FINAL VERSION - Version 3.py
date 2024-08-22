@@ -42,6 +42,7 @@ def quit():
 
 #print all customer details 
 def print_customer_details ():
+    tree = ttk.Treeview(columns=customer_details,show="",style="ttk.style")
     if counters['total_entries'] == 0:
         messagebox.showwarning("Error","Enter all fields!")
     else:
@@ -122,7 +123,7 @@ def append_entry ():
         return 0
 
 #Function for deleting a row from the list
-def delete_row ():
+def delete_row():
     #find which row is to be deleted and delete it
     deletedreceipt_num = int(delete_item.get().strip().replace("",""))
     customer_detected = False
@@ -130,17 +131,22 @@ def delete_row ():
         if myOrder[1] == deletedreceipt_num:
             del customer_details[i]
             customer_detected = True
-                                
     #del customer_details[int(delete_item.get())]
     counters['total_entries'] -= 1
     name_count = counters['name_count']
     delete_item.delete(0,'end')
     #clear the last item displayed on the GUI
-    Label(main_window, text="       ").grid(column=0,row=name_count+8) 
-    Label(main_window, text="       ").grid(column=1,row=name_count+8)
-    Label(main_window, text="       ").grid(column=2,row=name_count+8)
-    Label(main_window, text="       ").grid(column=3,row=name_count+8)
-    Label(main_window, text="       ").grid(column=4,row=name_count+8)
+    for widget in main_window.grid_slaves():
+        if int(widget.grid_info()["row"]) > 7:
+            widget.grid_forget()
+            
+        
+
+    #Label(main_window, text="       ").grid(column=0,row=name_count+8) 
+    #Label(main_window, text="       ").grid(column=1,row=name_count+8)
+    #Label(main_window, text="       ").grid(column=2,row=name_count+8)
+    #Label(main_window, text="       ").grid(column=3,row=name_count+8)
+    #Label(main_window, text="       ").grid(column=4,row=name_count+8)
 
 #Create function for writing the entries to a text file.
 def saving_details(myOrder):
