@@ -43,28 +43,32 @@ def quit():
 
 #print all customer details 
 def print_customer_details ():
-
     for widget in main_window.grid_slaves():
-        if int(widget.grid_info()["row"]) > 3:
-            widget.grid_forget() 
-            
-        name_count = 0
-    #Create column headings
-        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Entry No.",bg='#b4c8e4').grid(column=0,row=7,pady=25)
-        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Reciept Number",bg='#b4c8e4').grid(column=1,row=7,pady=25)
-        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Full Name",bg='#b4c8e4').grid(column=2,row=7)
-        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Item Hired ",bg='#b4c8e4').grid(column=3,row=7)
-        Label(main_window, font=("Bahnschrift", 11, "bold"),text="Amount Hired",bg='#b4c8e4').grid(column=3,columnspan=3,padx=20,row=7)
+        if int(widget.grid_info()["row"]) > 3 :
+            widget.grid_forget()
+            print("widget.grid_forget()")
+        else:            
+            #Create column headings
+            if counters['total_entries'] > 0:
+                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Entry No.",bg='#b4c8e4').grid(column=0,row=7,pady=25)
+                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Reciept Number",bg='#b4c8e4').grid(column=1,row=7,pady=25)
+                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Full Name",bg='#b4c8e4').grid(column=2,row=7)
+                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Item Hired ",bg='#b4c8e4').grid(column=3,row=7)
+                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Amount Hired",bg='#b4c8e4').grid(column=3,columnspan=3,padx=20,row=7)
+                print("ELSE: widget.grid_forget()")
+        
     #add each item in the list into its own row
+    name_count = 0
     while name_count < counters['total_entries'] :
         Label(main_window, text=name_count).grid(column=0,row=name_count+8) 
-        Label(main_window, text=(customer_details[name_count][0]),font=("Bahnschrift", 11)).grid(column=0,row=name_count+8)
+        Label(main_window, text=(name_count+1),font=("Bahnschrift", 11)).grid(column=0,row=name_count+8)
         Label(main_window, text=(customer_details[name_count][1]),font=("Bahnschrift", 11)).grid(column=1,row=name_count+8)
         Label(main_window, text=(customer_details[name_count][2]),font=("Bahnschrift", 11)).grid(column=2,row=name_count+8)
         Label(main_window, text=(customer_details[name_count][3]),font=("Bahnschrift", 11)).grid(column=3,row=name_count+8)
         Label(main_window, text=(customer_details[name_count][4]),font=("Bahnschrift", 11)).grid(column=3,columnspan=3,padx=20,row=name_count+8)
         name_count +=  1
-        counters['name_count'] = name_count
+        counters['name_count'] = name_count  
+
 #Check the inputs are all valid
 def check_inputs ():
     #Program checks if name is not blank, if blank then it outputs a error
@@ -129,20 +133,7 @@ def delete_row():
         counters['total_entries'] -= 1
         name_count = counters['name_count']
         delete_item.delete(0,'end')
-        if len(customer_details) <= 0:
-            for widget in main_window.grid_slaves():
-                if int(widget.grid_info()["row"]) > 3:
-                    widget.grid_forget()
-        else: 
-            print_customer_details()
-
-
-    #delete_item.delete(0,'end')
-    #clear the last item displayed on the GUI
-    #if len(customer_details) <= 0:
-    #    for widget in main_window.grid_slaves():
-    #        if int(widget.grid_info()["row"]) > 3:
-    #            widget.grid_forget()
+        print_customer_details()
 
 #Create function for writing the entries to a text file.
 def saving_details(myOrder):
