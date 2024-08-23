@@ -3,10 +3,11 @@
 ########################################################################
 
 #import tkinter so we can make a GUI
-from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
 import random
+from tkinter import *
+from tkinter import messagebox, ttk
+
+
 #start the program running
 def main():
     #Start the GUI
@@ -46,9 +47,7 @@ def print_customer_details ():
     for widget in main_window.grid_slaves():
         if int(widget.grid_info()["row"]) > 3:
             widget.grid_forget() 
-    if counters['total_entries'] == 0:
-        messagebox.showwarning("Error","Enter all fields!")
-    else:
+            
         name_count = 0
     #Create column headings
         Label(main_window, font=("Bahnschrift", 11, "bold"),text="Entry No.",bg='#b4c8e4').grid(column=0,row=7,pady=25)
@@ -96,24 +95,12 @@ def check_inputs ():
 #add more customers to the list. 
 def append_entry ():  
     if check_inputs() == 1:        
-
-        #create variables for valid entries where a messagebox pops up when submit button is pressed. 
-        valid_name = (customer_name.get().isalpha()) == 1
-        valid_item = (item.get()) == 1
-        valid_amount = (entry_amount.get().isdigit()) == 1
-        valid_entries = [valid_name and valid_item and valid_amount]
         #Create a variable for random receipt number. 
         receipt_num = random.randint(1,10000)
         #append each item to its own area of the list
-        customer_details.append([ str(counters['total_entries']) ,receipt_num,customer_name.get(),item.get(),entry_amount.get()])
+        customer_details.append([ str(counters['total_entries']) ,int(receipt_num),customer_name.get(),item.get(),entry_amount.get()])
         #create a bulleted list for the valid entries messagebox.
-        bulleted_list = "\n".join([
-        "\u2022 Name is valid",
-        "\u2022 Amount is valid",
-        "\u2022 Item has been selected"])
-        for i in valid_entries:
-            messagebox.showinfo("Valid Entries!",bulleted_list)
-            saving_details(customer_details)        
+        saving_details(customer_details)        
         #clear the boxes
         customer_name.delete(0,'end')
         item.set('')
@@ -132,31 +119,36 @@ def delete_row():
         if myOrder[1] == deletedreceipt_num:
             del customer_details[i]
             customer_detected = True
-    #del customer_details[int(delete_item.get())]
-    counters['total_entries'] -= 1
-    name_count = counters['name_count']
-    delete_item.delete(0,'end')
-    #clear the last item displayed on the GUI
-    if len(customer_details) <= 0:
-        for widget in main_window.grid_slaves():
-            if int(widget.grid_info()["row"]) > 3:
-                widget.grid_forget()
-    else:
-        print_customer_details()
-            
         
+    if customer_detected: 
+            #customer_detected = False
+        #if deletedreceipt_num != myOrder:
+            #customer_detected = True
+    #del customer_details[int(delete_item.get())]
+        print("grid to be updated")
+        counters['total_entries'] -= 1
+        name_count = counters['name_count']
+        delete_item.delete(0,'end')
+        if len(customer_details) <= 0:
+            for widget in main_window.grid_slaves():
+                if int(widget.grid_info()["row"]) > 3:
+                    widget.grid_forget()
+        else: 
+            print_customer_details()
 
-    #Label(main_window, text="       ").grid(column=0,row=name_count+8) 
-    #Label(main_window, text="       ").grid(column=1,row=name_count+8)
-    #Label(main_window, text="       ").grid(column=2,row=name_count+8)
-    #Label(main_window, text="       ").grid(column=3,row=name_count+8)
-    #Label(main_window, text="       ").grid(column=4,row=name_count+8)
+
+    #delete_item.delete(0,'end')
+    #clear the last item displayed on the GUI
+    #if len(customer_details) <= 0:
+    #    for widget in main_window.grid_slaves():
+    #        if int(widget.grid_info()["row"]) > 3:
+    #            widget.grid_forget()
 
 #Create function for writing the entries to a text file.
 def saving_details(myOrder):
     with open("customerdeats.txt","a") as file:
         for i in myOrder[len(myOrder)-1]:
-            file.write(str(i)+ " ")  
+            file.write(str(i)+ ",")  
         file.write("\n")
         file.close()
 
