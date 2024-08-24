@@ -6,6 +6,7 @@
 import random
 from tkinter import *
 from tkinter import messagebox, ttk
+import os
 
 
 #start the program running
@@ -16,7 +17,7 @@ def main():
 
 main_window =Tk() 
 main_window.title('Julies Party Hire')
-main_window.geometry('692x340')
+main_window.geometry('692x390')
 bgtest = PhotoImage(file = "purplepartybg2.png")
 
 #Show image using label
@@ -46,53 +47,51 @@ def print_customer_details ():
     for widget in main_window.grid_slaves():
         if int(widget.grid_info()["row"]) > 3 :
             widget.grid_forget()
-            print("widget.grid_forget()")
         else:            
             #Create column headings
             if counters['total_entries'] > 0:
-                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Entry No.",bg='#b4c8e4').grid(column=0,row=7,pady=25)
-                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Reciept Number",bg='#b4c8e4').grid(column=1,row=7,pady=25)
-                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Full Name",bg='#b4c8e4').grid(column=2,row=7)
-                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Item Hired ",bg='#b4c8e4').grid(column=3,row=7)
-                Label(main_window, font=("Bahnschrift", 11, "bold"),text="Amount Hired",bg='#b4c8e4').grid(column=3,columnspan=3,padx=20,row=7)
-                print("ELSE: widget.grid_forget()")
+                Label(main_window, font=("Bahnschrift", 10, "bold"),text="Entry No.",bg='#b4c8e4').grid(column=0,row=7,pady=25)
+                Label(main_window, font=("Bahnschrift", 10, "bold"),text="Reciept Number",bg='#b4c8e4').grid(column=1,row=7,pady=25)
+                Label(main_window, font=("Bahnschrift", 10, "bold"),text="Full Name",bg='#b4c8e4').grid(column=2,row=7)
+                Label(main_window, font=("Bahnschrift", 10, "bold"),text="Item Hired ",bg='#b4c8e4').grid(column=3,row=7)
+                Label(main_window, font=("Bahnschrift", 10, "bold"),text="Amount Hired",bg='#b4c8e4').grid(column=3,columnspan=3,padx=20,row=7)
         
     #add each item in the list into its own row
     name_count = 0
     while name_count < counters['total_entries'] :
         Label(main_window, text=name_count).grid(column=0,row=name_count+8) 
         Label(main_window, text=(name_count+1),font=("Bahnschrift", 11)).grid(column=0,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][1]),font=("Bahnschrift", 11)).grid(column=1,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][2]),font=("Bahnschrift", 11)).grid(column=2,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][3]),font=("Bahnschrift", 11)).grid(column=3,row=name_count+8)
-        Label(main_window, text=(customer_details[name_count][4]),font=("Bahnschrift", 11)).grid(column=3,columnspan=3,padx=20,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][1]),font=("Bahnschrift", 10)).grid(column=1,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][2]),font=("Bahnschrift", 10)).grid(column=2,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][3]),font=("Bahnschrift", 10)).grid(column=3,row=name_count+8)
+        Label(main_window, text=(customer_details[name_count][4]),font=("Bahnschrift", 10)).grid(column=3,columnspan=3,padx=20,row=name_count+8)
         name_count +=  1
-        counters['name_count'] = name_count  
+        counters['name_count'] = name_count 
 
 #Check the inputs are all valid
 def check_inputs ():
     #Program checks if name is not blank, if blank then it outputs a error
     if len(customer_name.get()) == 0:
-        messagebox.showwarning("Warning","Customer Name field must not be left blank!")
+        messagebox.showwarning("Warning","Customer Name field must not be left blank.")
         return 0 # entered details were incorrect.
     elif (customer_name.get().isalpha()) == False:
-        messagebox.showerror("Error","No numbers, blank symbols or symbols for name. Alphabet only and no spaces!")
+        messagebox.showerror("Error","No numbers, blank symbols or symbols for name. Alphabet only and no spaces.")
         return 0 # entered details were incorrect.
     if len(item.get()) == 0:
-        messagebox.showwarning("Warning","You cannot procced without selecting a item!")
+        messagebox.showwarning("Warning","You cannot procced without selecting a item.")
         return 0
     elif (item.get().isdigit()) == True:
-        messagebox.showwarning("Error","Not a valid item!")
+        messagebox.showwarning("Error","Not a valid item.")
         return 0
     #Program checks if the item amount is not blank and that the amount enetered is between 1-500 
     if len(entry_amount.get()) == 0:
-        messagebox.showwarning("Warning","You must not leave the Amount Hired Field Blank!")
+        messagebox.showwarning("Warning","You must not leave the Amount Hired Field Blank.")
         return 0 # entered details were incorrect.
     elif (entry_amount.get().isdigit()) == False: 
-        messagebox.showerror("Error","No symbols, negative numbersor letters in the amount hired field!")
+        messagebox.showerror("Error","No symbols, negative numbersor letters in the amount hired field.")
         return 0
     elif int(entry_amount.get()) < 1 or  int(entry_amount.get()) > 500:
-        messagebox.showerror("Error","You can only have a quanitiy of an item between the range of 1-500!") 
+        messagebox.showerror("Error","You can only have a quanitiy of an item between the range of 1-500.") 
         return 0 # entered details were incorrect.     
     return 1 # all the details are correct.
 
@@ -117,23 +116,26 @@ def append_entry ():
 #Function for deleting a row from the list
 def delete_row():
     #find which row is to be deleted and delete it
-    deletedreceipt_num = int(delete_item.get().strip().replace("",""))
-    customer_detected = False
-    for i, myOrder in enumerate(customer_details):
-        if myOrder[1] == deletedreceipt_num:
-            del customer_details[i]
-            customer_detected = True
-        
-    if customer_detected: 
-            #customer_detected = False
-        #if deletedreceipt_num != myOrder:
-            #customer_detected = True
-    #del customer_details[int(delete_item.get())]
-        print("grid to be updated")
-        counters['total_entries'] -= 1
-        name_count = counters['name_count']
-        delete_item.delete(0,'end')
-        print_customer_details()
+    if (delete_item.get()) == "":
+        messagebox.showerror("Error","Enter a receipt number to delete.")
+    
+
+    else:
+        deletedreceipt_num = int(delete_item.get().strip().replace("",""))
+        customer_detected = False
+        for i, myOrder in enumerate(customer_details):
+            if myOrder[1] == deletedreceipt_num:
+                del customer_details[i]
+                customer_detected = True
+
+         
+        if customer_detected: 
+            counters['total_entries'] -= 1
+            name_count = counters['name_count']
+            delete_item.delete(0,'end')
+            print_customer_details()
+        else:
+            messagebox.showerror("Error","Receipt Number not found.")
 
 #Create function for writing the entries to a text file.
 def saving_details(myOrder):
