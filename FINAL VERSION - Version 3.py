@@ -88,7 +88,7 @@ def append_entry ():
         #Create a variable for random receipt number. 
         receipt_num = random.randint(1,10000)
         #append each item to its own area of the list
-        customer_details.append([ str(counters['total_entries']) ,int(receipt_num),customer_name.get(),item.get(),entry_amount.get()])
+        customer_details.append([ str(counters['total_entries']+1) ,int(receipt_num),customer_name.get(),item.get(),entry_amount.get()]) 
         #call the saving_details() function so that the details can be written to a file.
         saving_details(customer_details)        
         #clear the boxes
@@ -125,7 +125,7 @@ def delete_customer_receipt():
 
 #Create function for writing the entries to a text file.
 def saving_details(myOrder):
-    with open("customerdeats.txt","a") as file:
+    with open("customerdetails.txt","a") as file:
         for i in myOrder[len(myOrder)-1]:
             file.write(str(i)+ ",")  
         file.write("\n")
